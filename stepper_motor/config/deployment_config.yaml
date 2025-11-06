@@ -1,0 +1,31 @@
+# Deployment Configuration (Static Target Tracking)
+
+# Static target mode
+target:
+  mode: "static"              # "static" or "sin" (for testing)
+  static_angle: 1.57          # 90 degrees in radians
+  hold_duration: null         # null = infinite
+
+# Policy deployment
+policy:
+  use_onboard_inference: true # Run policy on Teensy (recommended)
+  policy_path: "models/best_policy_quant.bin"
+  fallback_policy: "safe_stop"  # "safe_stop", "hold", or "pid"
+
+# Observation filling for deployment
+observation:
+  # Since dtheta_ref_now = 0 and preview = constant for static target
+  preview_fill_mode: "constant"  # Fill preview with same value
+
+# Safety (stricter for deployment)
+safety:
+  max_current_a: 2.5          # Lower limit for safety
+  max_temp_c: 70.0
+  enable_watchdog: true
+  watchdog_timeout_ms: 500
+
+# Monitoring
+monitoring:
+  publish_rate_hz: 100
+  log_performance: true
+  alert_on_fault: true

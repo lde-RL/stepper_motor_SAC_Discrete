@@ -1,0 +1,71 @@
+# Stepper Motor RL Training Configuration
+
+# Trajectory generation (variable sin waves)
+trajectory:
+  min_amplitude: 0.5      # rad
+  max_amplitude: 2.0      # rad
+  min_frequency: 0.5      # Hz
+  max_frequency: 3.0      # Hz
+  ramp_duration: 0.1      # sec (smooth episode start/end)
+
+# Reward function weights
+reward:
+  error_weight: 1.0           # Weight for |theta_ref - theta_actual|
+  derivative_weight: 0.5      # Weight for error derivative
+  switch_penalty: 0.01        # Penalty for action switching
+  fault_penalty: 10.0         # Penalty for safety faults
+
+# RL algorithm (SAC-Discrete)
+rl:
+  num_actions: 16             # 4-bit switch combinations
+  hidden_dim: 64              # MLP hidden layer size
+  learning_rate: 0.0003       # 3e-4
+  gamma: 0.99                 # Discount factor
+  tau: 0.005                  # Target network soft update rate
+  alpha: 0.2                  # Initial entropy coefficient
+  auto_entropy_tuning: true   # Automatic temperature adjustment
+  target_entropy_ratio: 0.7   # Target entropy = -log(1/|A|) * ratio
+
+  # Replay buffer
+  buffer_capacity: 100000     # Max transitions to store
+  use_per: true               # Use Prioritized Experience Replay
+  per_alpha: 0.6              # Priority exponent
+  per_beta: 0.4               # Importance sampling exponent (anneals to 1.0)
+  n_step: 5                   # n-step returns
+
+  # Training
+  batch_size: 256             # Batch size for updates
+  warmup_steps: 1000          # Random exploration before training
+  train_frequency: 200        # Training updates per second (Hz)
+
+  # Observation structure
+  preview_length: 32          # K: future target preview steps
+  action_hist_length: 16      # N: past action history
+
+# Episode management
+episode:
+  min_steps: 2000             # Minimum episode length (2 seconds @ 1kHz)
+  max_steps: 5000             # Maximum episode length (5 seconds @ 1kHz)
+  timeout_done: true          # Treat timeout as terminal
+
+# Logging and checkpointing
+logging:
+  log_dir: "logs"
+  model_dir: "models"
+  save_interval: 10           # Save every N episodes
+  tensorboard: true
+  log_video: false            # (Future: log encoder traces)
+
+# Hardware safety limits
+safety:
+  max_current_a: 3.0
+  max_temp_c: 80.0
+  min_voltage_v: 10.0
+  max_voltage_v: 14.0
+  comm_timeout_ms: 1000
+
+# Deployment settings
+deployment:
+  quantization: "int8"
+  chunk_size: 256             # Bytes per PolicyUpdate message
+  test_episodes: 10           # Episodes to test before deployment
