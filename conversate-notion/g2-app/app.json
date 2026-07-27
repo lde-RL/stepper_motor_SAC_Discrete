@@ -1,0 +1,8 @@
+{
+  "name": "conversate-notion",
+  "displayName": "Conversate → Notion",
+  "version": "0.1.0",
+  "description": "Streams G2 mic audio to a relay that transcribes, structures with Claude, and files a Notion page.",
+  "entry": "src/main.ts",
+  "permissions": ["g2-microphone"]
+}

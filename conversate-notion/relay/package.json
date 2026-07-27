@@ -1,0 +1,21 @@
+{
+  "name": "conversate-notion-relay",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Relay: G2 PCM audio -> Deepgram -> Claude -> Notion",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
+    "@deepgram/sdk": "^3.9.0",
+    "@notionhq/client": "^2.2.15",
+    "dotenv": "^16.4.5",
+    "ws": "^8.18.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
